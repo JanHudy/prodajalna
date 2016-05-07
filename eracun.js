@@ -190,8 +190,8 @@ streznik.post('/izpisiRacunBaza', function(zahteva, odgovor) {
 var strankaIz = function(stranka, callback) {
     pb.all("SELECT Customer.* FROM Customer, Invoice \
             WHERE Customer.CustomerId = " + stranka,
-    function(vrstice) {
-        callback(vrstice);
+    function(napaka, vrstice) {
+        callback(napaka, vrstice);
     })
 }
 
@@ -204,7 +204,7 @@ streznik.get('/izpisiRacun/:oblika', function(zahteva, odgovor) {
       odgovor.send("<p>V košarici nimate nobene pesmi, \
         zato računa ni mogoče pripraviti!</p>");
     } else {
-      strankaIz(zahteva.session.stranka, function(stranka) {
+      strankaIz(zahteva.session.stranka, function(napaka, stranka) {
         odgovor.setHeader('content-type', 'text/xml');
         odgovor.render('eslog', {
           vizualiziraj: zahteva.params.oblika == 'html' ? true : false,
